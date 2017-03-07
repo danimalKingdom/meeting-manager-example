@@ -37,7 +37,42 @@ class MeetingsController < ApplicationController
   end
 
   def show
-    @meeting = Meeting.find_by(id: params[:id])
+    @meeting = Meeting.find(params[:id])
     render 'show.html.erb'
   end
+
+  def edit
+    @meeting = Meeting.find(params[:id])
+    @tags = Tag.all
+  end
+
+  def update
+    @meeting = Meeting.find(params[:id])
+    if @meeting.update(
+      name: params[:name],
+      address: params[:address],
+      start_time: params[:start_time],
+      end_time: params[:end_time],
+      notes: params[:notes]
+      )
+      @meeting.tags.destroy_all #deletes MeetingTag models from db 
+      params[:tags].each do |tag_id|
+        MeetingTag.create(
+          meeting_id: @meeting.id,
+          tag_id: tag_id
+          )
+      end
+      flash[:success] = "Meeting successfully updated"
+      redirect_to "/meetings/#{@meeting.id}"
+    else
+      @tags = Tag.all
+      render :edit
+    end
+  end
 end
+
+
+
+
+
+

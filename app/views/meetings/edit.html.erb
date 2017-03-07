@@ -1,4 +1,4 @@
-<h1>Create a meeting</h1>
+<h1>Edit a meeting</h1>
 
 <% if @meeting.errors.any? %>
   <div id="error_explanation">
@@ -12,9 +12,9 @@
   </div>
 <% end %>
 
-<%= form_tag "/meetings", method: :post do %>
+<%= form_tag "/meetings/#{@meeting.id}", method: :patch do %>
   <%= render "form_partial" %>
   <div>
-    <%= submit_tag "Create Meeting" %>
+    <%= submit_tag "Edit Meeting" %>
   </div>
 <% end %>
