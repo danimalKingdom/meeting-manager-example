@@ -8,7 +8,13 @@
     <label>Search by name:</label>
     <input ng-model="nameFilter">
 
-    <div ng-repeat="meeting in meetings | filter: {name: nameFilter}">
+    <div>
+      <button ng-click="changeOrderAttribute('start_time')">Sort by date</button>
+      <p>orderAttribute: {{orderAttribute}}</p>
+      <p>orderDescending: {{orderDescending}}</p>
+    </div>
+
+    <div ng-repeat="meeting in meetings | filter: {name: nameFilter} | orderBy: orderAttribute:orderDescending">
       <h3><a href="/meetings/{{ meeting.id }}">{{ meeting.name }}<a></h3>
       <p>
         Tags:
