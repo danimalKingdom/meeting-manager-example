@@ -6,7 +6,10 @@
   <div ng-controller="meetingsCtrl" ng-init="setUp()">
 
     <label>Search by name:</label>
-    <input ng-model="nameFilter">
+    <input ng-model="nameFilter" list="names">
+    <datalist id="names">
+      <option ng-repeat="meeting in meetings">{{ meeting.name }}</option>
+    </datalist>
 
     <div>
       <button ng-click="changeOrderAttribute('start_time')">Sort by date</button>
