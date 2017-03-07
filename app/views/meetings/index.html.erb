@@ -4,7 +4,11 @@
 
 <div ng-app="app">
   <div ng-controller="meetingsCtrl" ng-init="setUp()">
-    <div ng-repeat="meeting in meetings">
+
+    <label>Search by name:</label>
+    <input ng-model="nameFilter">
+
+    <div ng-repeat="meeting in meetings | filter: {name: nameFilter}">
       <h3><a href="/meetings/{{ meeting.id }}">{{ meeting.name }}<a></h3>
       <p>
         Tags:
