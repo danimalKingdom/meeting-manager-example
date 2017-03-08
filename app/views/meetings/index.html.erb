@@ -1,3 +1,5 @@
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_API_KEY'] %>"></script>
+
 <div ng-app="app">
   <div ng-controller="meetingsCtrl" ng-init="setUp()">
 
@@ -35,6 +37,8 @@
       </div>
     </form>
 
+    
+    <div id="map"></div>
 
 
     <h1><a href="/meetings">All meetings</a></h1>
@@ -61,5 +65,7 @@
       <p>Start time: {{ meeting.start_time }} </p>
       <p>End time: {{ meeting.end_time }}</p>
     </div>
+
   </div>
 </div>
+

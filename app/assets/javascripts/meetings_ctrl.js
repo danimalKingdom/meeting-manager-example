@@ -1,3 +1,4 @@
+/* global angular, google */
 (function() {
   "use strict";
 
@@ -6,6 +7,7 @@
     $scope.setUp = function(){ 
       $http.get('/api/v1/meetings.json').then(function(response){
         $scope.meetings = response.data;
+        initMap($scope.meetings);
       });
       $http.get('/api/v1/tags.json').then(function(response){
         $scope.tags = response.data;
@@ -43,6 +45,35 @@
 
     window.scope = $scope;
 
-  });
+    function initMap(meetings) {
+      var geocoder = new google.maps.Geocoder();
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: -34.397, lng: 150.644},
+        zoom: 8
+      });
+      var markers = [];
+      var bounds = new google.maps.LatLngBounds();
+      meetings.forEach(function(meeting) {
+        console.log(meeting);
+        geocoder.geocode({address: meeting.address}, function(results, status) {
+          if (status === google.maps.GeocoderStatus.OK) {
+            map.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+              position: results[0].geometry.location,
+              map: map,
+              title: 'Hello World!'
+            });
+            markers.push(marker);
+            for (var i = 0;i < markers.length; i++) {
+              bounds.extend(markers[i].getPosition());
+            }
+            map.fitBounds(bounds);
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+      });
+    }
 
+  });
 }());
