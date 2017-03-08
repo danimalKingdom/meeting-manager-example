@@ -1,9 +1,9 @@
 <div ng-app="app">
   <div ng-controller="meetingsCtrl" ng-init="setUp()">
 
-    <h3>Create new meeting</h3>
+    <button ng-click="toggleForm()">Create new meeting</button>
 
-    <form>
+    <form ng-if="showForm">
       <div>
         <label>Name:</label>
         <input ng-model="newMeetingName">
@@ -29,7 +29,6 @@
         <select ng-model="newMeetingTags" multiple="multiple">
           <option ng-repeat="tag in tags" value="{{ tag.id }}">{{ tag.name }}</option>
         </select>
-        <p>{{newMeetingTags}}</p>
       </div>
       <div>
         <input ng-click="createMeeting(newMeetingName, newMeetingAddress, newMeetingStartTime, newMeetingEndTime, newMeetingNotes, newMeetingTags)" type="submit">

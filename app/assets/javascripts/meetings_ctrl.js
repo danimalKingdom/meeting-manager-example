@@ -37,6 +37,10 @@
       $scope.orderAttribute = attribute;
     };
 
+    $scope.toggleForm = function(){
+      $scope.showForm = !$scope.showForm;
+    };
+
     window.scope = $scope;
 
   });
