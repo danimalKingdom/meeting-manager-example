@@ -1,14 +1,23 @@
-<h3><%= @meeting.name %></h3>
-<a href="/meetings/<%= @meeting.id %>/edit">Edit this meeting</a>
-<p>
-  Tags:
-  <% @meeting.tags.each do |tag| %>
-    <a href="/meetings?tag=<%= tag.name %>"><%= tag.name %></a>  
-  <% end %>
-</p>
-<p>Address: <%= @meeting.address %></p>
-<p>Start time: <%= @meeting.start_time %></p>
-<p>End time: <%= @meeting.end_time %></p>
-<h4>Notes:</h4>
-<p><%= @meeting.notes %></p>
-<a href="/meetings">Back to all meetings</a>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_API_KEY'] %>"></script>
+
+<div ng-app="app">
+  <div ng-controller="meetingsCtrl" ng-init="setUpShow()">
+
+    <h3>{{ meeting.name }}</h3>
+    <a href="/meetings/{{ meeting.id }}/edit">Edit this meeting</a>
+    <p>
+      Tags:
+      <a class="tag-link" ng-repeat="tag in meeting.tags" href="/meetings?tag={{ tag.name }}">{{ tag.name }}</a>
+    </p>
+    <p>Address: {{ meeting.address }}</p>
+    <p>Start time: {{ meeting.start_time }}</p>
+    <p>End time: {{ meeting.end_time }}</p>
+    <h4>Notes:</h4>
+    <p>{{ meeting.notes }}</p>
+    <a href="/meetings">Back to all meetings</a>
+
+    <div id="map"></div>
+  
+  </div>
+</div>
+

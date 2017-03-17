@@ -4,15 +4,28 @@
 
   angular.module("app").controller('meetingsCtrl', function($scope, $http){
 
-    $scope.setUp = function(){ 
+    $scope.setUpIndex = function(){ 
       $http.get('/api/v1/meetings.json').then(function(response){
         $scope.meetings = response.data;
-        initMap($scope.meetings);
+        indexMap($scope.meetings);
       });
       $http.get('/api/v1/tags.json').then(function(response){
         $scope.tags = response.data;
       });
     };
+
+    $scope.setUpShow = function(){
+      var path = window.location.pathname; 
+      var slicedPath = path.slice(path.lastIndexOf('/')+1, path.length);
+      $http.get('/api/v1/meetings/'+slicedPath+'.json').then(function(response){
+        $scope.meeting = response.data;
+        showMap($scope.meeting);
+      });
+      $http.get('/api/v1/tags.json').then(function(response){
+        $scope.tags = response.data;
+      });
+    };
+
 
     $scope.createMeeting = function(name, address, startTime, endTime, notes, tags){ 
       var params = {
@@ -27,7 +40,7 @@
         console.log(response);
         $scope.meetings.push(response.data);
       });
-    };
+      };
 
     $scope.changeOrderAttribute = function(attribute){
       if(attribute !== $scope.orderAttribute){
@@ -43,9 +56,7 @@
       $scope.showForm = !$scope.showForm;
     };
 
-    window.scope = $scope;
-
-    function initMap(meetings) {
+    function indexMap(meetings) {
       var geocoder = new google.maps.Geocoder();
       var map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: -34.397, lng: 150.644},
@@ -61,7 +72,7 @@
             var marker = new google.maps.Marker({
               position: results[0].geometry.location,
               map: map,
-              title: 'Hello World!'
+              title: 'Meetings Markers!'
             });
             markers.push(marker);
             for (var i = 0;i < markers.length; i++) {
@@ -74,6 +85,31 @@
         });
       });
     }
+
+    function showMap(meeting) {
+      var geocoder = new google.maps.Geocoder();
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: -34.397, lng: 150.644},
+        zoom: 8
+      });
+      var bounds = new google.maps.LatLngBounds();
+      geocoder.geocode({address: meeting.address}, function(results, status) {
+        if (status === google.maps.GeocoderStatus.OK) {
+          map.setCenter(results[0].geometry.location);
+          var marker = new google.maps.Marker({
+            position: results[0].geometry.location,
+            map: map,
+            title: 'Meeting Marker!'
+          });
+          bounds.extend(marker.getPosition());
+          map.fitBounds(bounds);
+        } else {
+          alert('Geocode was not successful for the following reason: ' + status);
+        }
+      });
+    }
+
+    window.scope = $scope;
 
   });
 }());

@@ -1,7 +1,7 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_API_KEY'] %>"></script>
 
 <div ng-app="app">
-  <div ng-controller="meetingsCtrl" ng-init="setUp()">
+  <div ng-controller="meetingsCtrl" ng-init="setUpIndex()">
 
     <button ng-click="toggleForm()">Create new meeting</button>
 
@@ -51,8 +51,6 @@
 
     <div>
       <button ng-click="changeOrderAttribute('start_time')">Sort by date</button>
-      <p>orderAttribute: {{orderAttribute}}</p>
-      <p>orderDescending: {{orderDescending}}</p>
     </div>
 
     <div ng-repeat="meeting in meetings | filter: {name: nameFilter} | orderBy: orderAttribute:orderDescending">
