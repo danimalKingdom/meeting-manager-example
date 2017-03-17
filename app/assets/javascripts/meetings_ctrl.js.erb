@@ -7,7 +7,7 @@
     $scope.setUpIndex = function(){ 
       $http.get('/api/v1/meetings.json').then(function(response){
         $scope.meetings = response.data;
-        indexMap($scope.meetings);
+        initMap($scope.meetings);
       });
       $http.get('/api/v1/tags.json').then(function(response){
         $scope.tags = response.data;
@@ -19,7 +19,7 @@
       var slicedPath = path.slice(path.lastIndexOf('/')+1, path.length);
       $http.get('/api/v1/meetings/'+slicedPath+'.json').then(function(response){
         $scope.meeting = response.data;
-        showMap($scope.meeting);
+        initMap([$scope.meeting]);
       });
       $http.get('/api/v1/tags.json').then(function(response){
         $scope.tags = response.data;
@@ -56,7 +56,7 @@
       $scope.showForm = !$scope.showForm;
     };
 
-    function indexMap(meetings) {
+    function initMap(meetings) {
       var geocoder = new google.maps.Geocoder();
       var map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: -34.397, lng: 150.644},
@@ -83,29 +83,6 @@
             alert('Geocode was not successful for the following reason: ' + status);
           }
         });
-      });
-    }
-
-    function showMap(meeting) {
-      var geocoder = new google.maps.Geocoder();
-      var map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: -34.397, lng: 150.644},
-        zoom: 8
-      });
-      var bounds = new google.maps.LatLngBounds();
-      geocoder.geocode({address: meeting.address}, function(results, status) {
-        if (status === google.maps.GeocoderStatus.OK) {
-          map.setCenter(results[0].geometry.location);
-          var marker = new google.maps.Marker({
-            position: results[0].geometry.location,
-            map: map,
-            title: 'Meeting Marker!'
-          });
-          bounds.extend(marker.getPosition());
-          map.fitBounds(bounds);
-        } else {
-          alert('Geocode was not successful for the following reason: ' + status);
-        }
       });
     }
 
